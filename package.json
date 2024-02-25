@@ -1,0 +1,21 @@
+{
+  "name": "eufy-clean-local-key-grabber",
+  "version": "1.0.0",
+  "description": "eufy Clean RoboVac device ID and local key discovery tool written in TypeScript.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.6.7",
+    "crypto": "^1.0.1",
+    "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.20",
+    "@types/uuid": "^9.0.8"
+  }
+}
