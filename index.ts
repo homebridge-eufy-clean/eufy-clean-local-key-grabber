@@ -1,8 +1,8 @@
 import { EufyHomeSession, TuyaAPISession } from './clients';
 
 async function main() {
-    const email = 'hgelderbloem@icloud.com';
-    const password = 'bewbA0-mabmyg-cuktac';
+    const email = '';
+    const password = '';
 
     const eufySession = new EufyHomeSession(email, password);
     if (eufySession.email !== null && eufySession.password !== null) {
