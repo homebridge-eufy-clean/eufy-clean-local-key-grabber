@@ -211,16 +211,19 @@ export class TuyaAPISession {
         return md5(encrypted_uid_string.toUpperCase()).toString();
     }
 
-    async request_session(username: string, country_code: string) {
+    async request_session(username: string | null, country_code: string) {
+        if (username === null) {
+            throw new Error("Username is null");
+        }
         const password = this.determine_password(username);
         const token_response = await this.request_token(username, country_code);
-
+    
         const encrypted_password = unpadded_rsa(
             parseInt(token_response["exponent"]),
             parseInt(token_response["publicKey"]),
             Buffer.from(password, 'utf8')
         );
-
+    
         const data = {
             "uid": username,
             "createGroup": true,
@@ -230,7 +233,7 @@ export class TuyaAPISession {
             "options": '{"group": 1}',
             "token": token_response["token"],
         };
-
+    
         return this._request(
             "tuya.m.user.uid.password.login.reg",
             JSON.stringify(data)
@@ -276,13 +279,22 @@ export class EufyHomeSession {
         return JSON.stringify(data);
     }
 
-    constructor(email: string, password: string) {
+    Initialize(email: string, password: string) {
+        this.email = email;
+        this.password = password;
         this.session = axios.create({
             headers: DEFAULT_EUFY_HEADERS
         });
         this.base_url = EUFY_BASE_URL;
+    }
+    
+    constructor(email: string, password: string) {
         this.email = email;
         this.password = password;
+        this.session = axios.create({
+            headers: DEFAULT_EUFY_HEADERS
+        });
+        this.base_url = EUFY_BASE_URL;
     }
 
     url(path: string) {
@@ -365,6 +377,12 @@ export class EufyHomeSession {
     }
 
     async get_user_info() {
+        if (!this.session.headers['token'] || !this.session.headers['uid']) {
+            if (this.email === null || this.password === null) {
+                throw new Error("Email or password is null");
+            }
+            await this.login(this.email, this.password);
+        }
         const resp = await this._request("GET", "user/info") as ResponseType;
         return resp.user_info;
     }

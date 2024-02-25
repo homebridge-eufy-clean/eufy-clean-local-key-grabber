@@ -5,6 +5,7 @@ async function main() {
     const password = 'bewbA0-mabmyg-cuktac';
 
     const eufySession = new EufyHomeSession(email, password);
+    eufySession.Initialize(email, password)
 
     let eufyClient = new EufyHomeSession(process.argv[2], process.argv[3]);
     let userInfo = await eufyClient.get_user_info();
